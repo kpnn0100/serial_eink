@@ -5,8 +5,6 @@ def rotate_image_90(image):
     rotated_image = cv2.rotate(image, cv2.ROTATE_90_CLOCKWISE)
 
     # Display the original and rotated images (optional)
-    cv2.imshow('Original Image', image)
-    cv2.imshow('Rotated Image', rotated_image)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
 
@@ -45,11 +43,10 @@ def bits_to_bytes(bit_array):
         byte_array.append(byte)
 
     return byte_array
-def resize_and_convert_to_binary_grayscale(input_image_path, output_text_file, new_size=(64, 64)):
+def resize_and_convert_to_binary_grayscale(input_image_path, new_size=(64, 64)):
     # Read the input image
     original_image = cv2.imread(input_image_path)
     original_image = resize_with_crop_and_perspective(original_image, new_size=(128,296))
-    print(original_image)
     grayscale_image = cv2.cvtColor(original_image, cv2.COLOR_BGR2GRAY)  
     # Resize the image
     resized_image = cv2.resize(grayscale_image, new_size)
@@ -57,30 +54,34 @@ def resize_and_convert_to_binary_grayscale(input_image_path, output_text_file, n
     # Convert to 2-level binary grayscale
     _, binary_image = cv2.threshold(resized_image, np.average(resized_image), 255, cv2.THRESH_BINARY)
     # Display the binary image using OpenCV's imshow
+    
+    
+    binary_image = rotate_image_90(binary_image)
+    binary_image = cv2.bitwise_not(binary_image)
     cv2.imshow('Binary Image', binary_image)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
-    binary_image = rotate_image_90(binary_image)
     # Flatten the 2D array to a 1D array
     flattened_image = binary_image.flatten()
 
     # Convert the 1D array to a byte string
     data = bits_to_bytes(flattened_image)
-    print(data)
-    byte_text = ''
-    for i in range(len(data)-1):
-        if i % 16 == 0:
-            byte_text +='\n'
-        byte_text +=hex(data[i])
-        byte_text +=', '
+    return data
 
-    # Write the byte text to a file
-    with open(output_text_file, 'w') as file:
-        file.write(byte_text)
 
-    print(f"Image resized and converted to binary grayscale. Byte text saved to {output_text_file}")
+# # Example usage
+# input_image_path = 'image.png'
+# output_text_file = 'output_byte_text.txt'
+# # Write the byte text to a file
+# data = resize_and_convert_to_binary_grayscale(input_image_path,new_size=(296,128))
+# byte_text = ''
+# for i in range(len(data)-1):
+#     if i % 16 == 0:
+#         byte_text +='\n'
+#     byte_text +=hex(data[i])
+#     byte_text +=', '
+# with open(output_text_file, 'w') as file:
+#     file.write(byte_text)
 
-# Example usage
-input_image_path = 'image.png'
-output_text_file = 'output_byte_text.txt'
-resize_and_convert_to_binary_grayscale(input_image_path, output_text_file,new_size=(296,128))
+# print(f"Image resized and converted to binary grayscale. Byte text saved to {output_text_file}")
+

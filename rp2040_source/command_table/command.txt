@@ -1,0 +1,24 @@
+Message Frame:
+[1 byte command type] [1 byte command code] [2 bytes length of data] [data]
+
+Status Codes:
+- 0x00: Success
+- 0x01: Busy/Pending
+- 0x02: Failed
+
+List of Command Types:
+- 0x00: Request
+- 0x01: Information/Response
+
+List of Command Codes:
+- 0x00: Screen Information
+  + Request Data: null
+  + Response Data: [1 byte orientation: 0x00 = vertical, 0x01 = horizontal] [2 bytes width] [2 bytes height]
+
+- 0x01: Change Image in Buffer
+  + Request Data: [image data: left to right, top to bottom]
+  + Response Data: [1 byte status code]
+
+- 0x02: Display Image in Buffer
+  + Request Data: null 
+  + Response Data: [1 byte status code]
