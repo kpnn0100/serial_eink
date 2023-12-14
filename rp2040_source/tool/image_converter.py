@@ -1,5 +1,16 @@
 import cv2
 import numpy as np
+def rotate_image_90(image):
+    # Rotate the image 90 degrees clockwise
+    rotated_image = cv2.rotate(image, cv2.ROTATE_90_CLOCKWISE)
+
+    # Display the original and rotated images (optional)
+    cv2.imshow('Original Image', image)
+    cv2.imshow('Rotated Image', rotated_image)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
+
+    return rotated_image
 def resize_with_crop_and_perspective(original_image, new_size=(200, 200)):
     # Get the original image's height and width
     height, width = original_image.shape[:2]
@@ -49,8 +60,10 @@ def resize_and_convert_to_binary_grayscale(input_image_path, output_text_file, n
     cv2.imshow('Binary Image', binary_image)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
+    binary_image = rotate_image_90(binary_image)
     # Flatten the 2D array to a 1D array
     flattened_image = binary_image.flatten()
+
     # Convert the 1D array to a byte string
     data = bits_to_bytes(flattened_image)
     print(data)
