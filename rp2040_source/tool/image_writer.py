@@ -38,7 +38,7 @@ def send_byte_array(ser, byte_array):
     except serial.SerialException as e:
         print(f"Error: {e}")
 def sendImage():
-    input_image_path = 'image2.png'
+    input_image_path = 'qr.png'
     data = resize_and_convert_to_binary_grayscale(input_image_path,new_size=(296,128))
     print(f"open device {dos_com}")
     ser = serial.Serial(dos_com, baudrate=4000000, timeout=0.01)
